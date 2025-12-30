@@ -435,9 +435,11 @@ COMMIT\
 ' /etc/ufw/before.rules
     
     # Настройка правил UFW
-    ufw --force allow OpenSSH
-    ufw --force allow 22/tcp
-    ufw --force allow 1194/udp
+    # Разрешить SSH (ВАЖНО - иначе потеряете доступ!)
+    ufw --force allow 22/tcp comment 'SSH'
+    
+    # Разрешить OpenVPN
+    ufw --force allow 1194/udp comment 'OpenVPN'
     
     # Включение UFW
     ufw --force enable
