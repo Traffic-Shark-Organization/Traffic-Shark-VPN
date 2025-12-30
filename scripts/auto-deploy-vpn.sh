@@ -76,8 +76,14 @@ collect_user_input() {
     log_info "Сбор конфигурационных данных..."
     echo ""
     
+    # Установка curl если его нет (нужен для определения IP)
+    if ! command -v curl &> /dev/null; then
+        log_info "Установка curl для определения внешнего IP..."
+        apt update -qq && apt install -y curl &> /dev/null
+    fi
+    
     # Определение внешнего IP
-    EXTERNAL_IP=$(curl -s ifconfig.me)
+    EXTERNAL_IP=$(curl -s ifconfig.me 2>/dev/null || curl -s icanhazip.com 2>/dev/null || echo "")
     log_info "Обнаружен внешний IP: $EXTERNAL_IP"
     read -p "Использовать этот IP для VPN? (Y/n): " -n 1 -r
     echo
