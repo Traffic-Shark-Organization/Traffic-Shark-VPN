@@ -2,6 +2,12 @@
 	"folders": [
 		{
 			"path": "."
+		},
+		{
+			"path": "../../Desktop/BinomDep"
+		},
+		{
+			"path": "../../Desktop/vpn/Traffic-Shark-VPN"
 		}
 	],
 	"settings": {}
