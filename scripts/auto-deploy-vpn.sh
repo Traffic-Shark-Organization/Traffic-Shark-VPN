@@ -238,15 +238,20 @@ install_packages() {
 setup_ip_forwarding() {
     log_info "Настройка IP forwarding..."
     
+    # Создать sysctl.conf если не существует
+    touch /etc/sysctl.conf
+    
     # Удаление старых записей если есть
-    sed -i '/net.ipv4.ip_forward/d' /etc/sysctl.conf
-    sed -i '/net.ipv6.conf.all.forwarding/d' /etc/sysctl.conf
+    sed -i '/net.ipv4.ip_forward/d' /etc/sysctl.conf 2>/dev/null || true
+    sed -i '/net.ipv6.conf.all.forwarding/d' /etc/sysctl.conf 2>/dev/null || true
     
     # Добавление новых
     echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf
     echo "net.ipv6.conf.all.forwarding=1" >> /etc/sysctl.conf
     
-    sysctl -p > /dev/null
+    # Применить немедленно
+    sysctl -w net.ipv4.ip_forward=1 > /dev/null
+    sysctl -w net.ipv6.conf.all.forwarding=1 > /dev/null
     
     log_success "IP forwarding настроен"
 }
